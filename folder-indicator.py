@@ -4,6 +4,9 @@ import gtk
 import appindicator
 import os
 
+import threading
+import time
+
 from subprocess import call
 
 from os import walk
@@ -22,11 +25,16 @@ APP_LABEL = "Folder"
 
 DEF_EDITOR = "gedit"
 
-PING_FREQUENCY = 200
+UPDATE_FREQ = 60 # in seconds
 PATH_ICON = 'folder' #__file__+'-icon.svg'
 PATH_CONF = __file__+'-conf.xml'
 
 class PanelElement:
+
+	def main(self):
+		print 'MAIN'
+		gtk.main()
+		
 	def __init__(self):
 		self.ind = appindicator.Indicator(
 			APP_NAME,
@@ -35,12 +43,7 @@ class PanelElement:
 		)
 		self.ind.set_label(APP_LABEL)
 		self.ind.set_status(appindicator.STATUS_ACTIVE)
-		self.ind.set_attention_icon("new-messages-red")
 
-		self.menu_setup()
-		self.ind.set_menu(self.menu)
-
-	def menu_setup(self):
 		DOMTree = xml.dom.minidom.parse(PATH_CONF)
 		collection = DOMTree.documentElement
 		
@@ -58,27 +61,49 @@ class PanelElement:
 			print c.getAttribute("title")
 			print c.getAttribute("path")
 			self.ind.set_label(c.getAttribute("title"))
-			mypath = c.getAttribute("path")
+			self.path = c.getAttribute("path")
 			
-		bookmarks = collection.getElementsByTagName("b")
+		if not isdir(self.path):
+			print "supplied path is not a dir"
+			
+		self.main()
+
+		#self.refresh_menu()
 		
+	def refresh_menu(self):
+	
+		print 'New Update: ', time.time()
+		threading.Timer(UPDATE_FREQ, self.refresh_menu).start()
+		
+		self.menu = gtk.Menu()
+		self.menu.popup()
+		self.ind.set_menu(self.menu)
+		
+		new_item = gtk.MenuItem(time.time(), False)
+		new_item.show()
+		
+		self.menu.append(new_item)
+
+	def menu_setup(self):
+			
 		print "***** files *****"
 
-		self.menu = gtk.Menu()		
+		self.menu = gtk.Menu()
+		self.menu.popup()
 		
-		self.populate_menu(self.menu, mypath)
+#		self.populate_menu(self.menu, mypath)
 
-		print "***** app buttons *****"
+#		print "***** app buttons *****"
 
-		self.separator = gtk.SeparatorMenuItem()
-		self.separator.show()
-		self.menu.append(self.separator)
+#		self.separator = gtk.SeparatorMenuItem()
+#		self.separator.show()
+#		self.menu.append(self.separator)
 
-		self.restart_item = gtk.MenuItem("Restart", False)
-		self.restart_item.connect("activate", self.restart)
-		self.restart_item.show()
-		self.menu.append(self.restart_item)
-
+#		self.restart_item = gtk.MenuItem("Restart", False)
+#		self.restart_item.connect("activate", self.restart)
+#		self.restart_item.show()
+#		self.menu.append(self.restart_item)
+		
 	def populate_menu(self, menu_father, path):
 	
 		onlydirs  = [f for f in listdir(path) if  isdir(join(path, f))]
@@ -120,11 +145,6 @@ class PanelElement:
 				new_item.show()
 				menu_father.append(new_item)
 
-	def main(self):
-		#self.check_mail()
-		#gtk.timeout_add(PING_FREQUENCY, self.check_mail)
-		gtk.main()
-		
 	def runcommand(self, widget):
 		print widget.get_tooltip_text()
 		os.system(widget.get_tooltip_text())
