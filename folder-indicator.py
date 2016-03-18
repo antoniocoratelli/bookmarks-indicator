@@ -33,8 +33,6 @@ PATH_CONF = __file__+'-conf.xml'
 
 class PanelElement:
 
-	refresh_status = True
-
 	def __init__(self):
 		self.ind = appindicator.Indicator(
 			APP_NAME,
@@ -70,14 +68,6 @@ class PanelElement:
 
 	def refresh_menu(self):
 	
-		print self.refresh_status
-		
-		if not self.refresh_status:
-			return
-	
-		refresh_time = time.time()
-		print 'refreshing menu', refresh_time
-		
 		# initialize empty menu
 		self.menu = gtk.Menu()
 		
