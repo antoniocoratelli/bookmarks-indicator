@@ -18,6 +18,8 @@ from Crypto.Random import random
 from xml.dom.minidom import parse
 import xml.dom.minidom
 
+import gobject
+
 import re
 
 APP_NAME =  "folder-indicator"
@@ -25,16 +27,14 @@ APP_LABEL = "Folder"
 
 DEF_EDITOR = "gedit"
 
-UPDATE_FREQ = 60 # in seconds
+UPDATE_FREQ = 5 # in seconds
 PATH_ICON = 'folder' #__file__+'-icon.svg'
 PATH_CONF = __file__+'-conf.xml'
 
 class PanelElement:
 
-	def main(self):
-		print 'MAIN'
-		gtk.main()
-		
+	refresh_status = True
+
 	def __init__(self):
 		self.ind = appindicator.Indicator(
 			APP_NAME,
@@ -65,93 +65,115 @@ class PanelElement:
 			
 		if not isdir(self.path):
 			print "supplied path is not a dir"
-			
-		self.main()
 
-		#self.refresh_menu()
-		
+		self.refresh_menu()
+
 	def refresh_menu(self):
 	
-		print 'New Update: ', time.time()
-		threading.Timer(UPDATE_FREQ, self.refresh_menu).start()
+		print self.refresh_status
 		
+		if not self.refresh_status:
+			return
+	
+		refresh_time = time.time()
+		print 'refreshing menu', refresh_time
+		
+		# initialize empty menu
 		self.menu = gtk.Menu()
-		self.menu.popup()
-		self.ind.set_menu(self.menu)
 		
-		new_item = gtk.MenuItem(time.time(), False)
+		# add time menu item
+		new_item = gtk.MenuItem(str(refresh_time), False)
 		new_item.show()
-		
 		self.menu.append(new_item)
 
-	def menu_setup(self):
-			
-		print "***** files *****"
-
-		self.menu = gtk.Menu()
-		self.menu.popup()
+		# add separator
+		self.append_separator(self.menu)
 		
-#		self.populate_menu(self.menu, mypath)
-
-#		print "***** app buttons *****"
-
-#		self.separator = gtk.SeparatorMenuItem()
-#		self.separator.show()
-#		self.menu.append(self.separator)
-
-#		self.restart_item = gtk.MenuItem("Restart", False)
-#		self.restart_item.connect("activate", self.restart)
-#		self.restart_item.show()
-#		self.menu.append(self.restart_item)
+		# get dirs and files list
+		list_dirs  = get_subdirs(self.path)
+		list_files = get_subfiles(self.path)
 		
-	def populate_menu(self, menu_father, path):
+    	# add dir menu items
+		for d in sorted(list_dirs):
+			self.append_dir(self.path, d, self.menu)
+
+		# add separator
+		if len(list_dirs):
+			self.append_separator(self.menu)
+
+		# add file menu items
+		for f in sorted(list_files):
+			self.append_file(self.path, d, self.menu)
+
+		# add separator
+		if len(list_files):
+			self.append_separator(self.menu)
+
+		# add restart menu item
+		restart_item = gtk.MenuItem("Restart", False)
+		restart_item.connect("activate", self.restart)
+		restart_item.show()
+		self.menu.append(restart_item)
+
+		# link menu to indicator
+		self.ind.set_menu(self.menu)
+		
+		# set callback for refresh_menu
+		#threading.Timer(UPDATE_FREQ, self.refresh_menu).start()
+		
+	#### MENU APPEND FUNCTIONS #################################################
+		
+	def append_dir(self, path, d, father):
+		d_item = gtk.MenuItem(d, False)
+		d_item.set_tooltip_text(path+"/"+d)
+		d_item.connect("activate", self.item_expand)
+		d_item.show()
+		father.append(d_item)
+		# add dummy separator
+		menu_sub = gtk.Menu()
+		self.append_separator(menu_sub)
+		d_item.set_submenu(menu_sub)
+		print d_item.get_events()
+		
+	def append_file(self, path, f, father):
+		f_item = gtk.MenuItem(f, False)
+		f_item.set_tooltip_text(path+"/"+f)
+		f_item.connect("activate", self.item_xdgopen)
+		f_item.show()
+		father.append(f_item)
+		
+	def append_separator(self, father):
+		separator = gtk.SeparatorMenuItem()
+		separator.show()
+		father.append(separator)
+		
+	############################################################################
 	
-		onlydirs  = [f for f in listdir(path) if  isdir(join(path, f))]
-		onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
-		print onlydirs
-		print onlyfiles
-    	
-		new_item = gtk.MenuItem(".", False)
-		new_item.set_tooltip_text(path)
-		new_item.connect("activate", self.runxdg)
-		new_item.show()
-		menu_father.append(new_item)
+	def item_expand(self, widget):
 
-		separator = gtk.SeparatorMenuItem()
-		separator.show()
-		menu_father.append(separator)
+		path = widget.get_tooltip_text()
+		sub = gtk.Menu()
 
-		for d in sorted(onlydirs):
-			if not d.startswith('.') and not d.endswith('~'):
-				new_item = gtk.MenuItem(d, False)
-				new_item.set_tooltip_text(path+"/"+d)
-				#new_item.connect("activate", self.runxdg)
-				new_item.show()
-				menu_father.append(new_item)
-			
-				menu_sub = gtk.Menu()
-				self.populate_menu(menu_sub, path+"/"+d)
-				new_item.set_submenu(menu_sub)
-			
-		separator = gtk.SeparatorMenuItem()
-		separator.show()
-		menu_father.append(separator)
-
-		for f in sorted(onlyfiles):
-			if not f.startswith('.') and not f.endswith('~'):
-				new_item = gtk.MenuItem(f, False)
-				new_item.set_tooltip_text(path+"/"+f)
-				new_item.connect("activate", self.runxdg)
-				new_item.show()
-				menu_father.append(new_item)
-
-	def runcommand(self, widget):
-		print widget.get_tooltip_text()
-		os.system(widget.get_tooltip_text())
+		# get dirs and files list
+		list_dirs  = get_subdirs(self.path)
+		list_files = get_subfiles(self.path)
 		
-	def runxdg(self, widget):
-		print widget.get_tooltip_text()
-		os.system("xdg-open \""+widget.get_tooltip_text()+"\" &")
+		# add dir menu items
+		for d in sorted(get_subdirs(path)):
+			self.append_dir(path, d, sub)
+		
+		# add separator
+		if len(list_dirs) and len(list_files):
+			self.append_separator(self.menu)
+
+		# add file menu items
+		for f in sorted(get_subfiles(path)):
+			self.append_file(path, f, sub)
+
+		widget.set_submenu(sub)
+	
+	def item_xdgopen(self, widget):
+		os.system('xdg-open "'+widget.get_tooltip_text()+'" &')
 		
 	def quit(self, widget):
 		sys.exit(0)
@@ -159,7 +181,31 @@ class PanelElement:
 	def restart(self, widget):
 		sys.exit(2)
 		
-if __name__ == "__main__":
-	indicator = PanelElement()
-	indicator.main()
+################################################################################
+################################################################################
 
+def get_subdirs(path):
+	return [f for f in listdir(path) if isdir(join(path, f)) and not f.startswith('.') and not f.endswith('~')]
+
+def get_subfiles(path):
+	return [f for f in listdir(path) if isfile(join(path, f)) and not f.startswith('.') and not f.endswith('~')]
+
+def gtk_main_thread():
+	gobject.threads_init()
+	gtk.main()
+	
+################################################################################
+################################################################################
+
+if __name__ == "__main__":
+
+#	# start gui thread
+#	gtk_thread = threading.Thread(target = gtk_main_thread)
+#	gtk_thread.setDaemon(True)
+#	gtk_thread.start()
+
+	# start indicator thread
+	indicator = PanelElement()
+	
+	gtk.main()
+	
