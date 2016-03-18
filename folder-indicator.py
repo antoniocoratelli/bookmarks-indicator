@@ -65,6 +65,8 @@ class PanelElement:
 			print "supplied path is not a dir"
 
 		self.refresh_menu()
+		
+		self.dummy_update()
 
 	def refresh_menu(self):
 	
@@ -100,8 +102,9 @@ class PanelElement:
 		# link menu to indicator
 		self.ind.set_menu(self.menu)
 		
-		# set callback for refresh_menu
-		#threading.Timer(UPDATE_FREQ, self.refresh_menu).start()
+	def dummy_update(self):
+		# set callback
+		threading.Timer(UPDATE_FREQ, self.dummy_update).start()
 		
 	#### MENU APPEND FUNCTIONS #################################################
 		
@@ -115,7 +118,6 @@ class PanelElement:
 		menu_sub = gtk.Menu()
 		self.append_separator(menu_sub)
 		d_item.set_submenu(menu_sub)
-		print d_item.get_events()
 		
 	def append_file(self, path, f, father):
 		f_item = gtk.MenuItem(f, False)
@@ -137,19 +139,19 @@ class PanelElement:
 		sub = gtk.Menu()
 
 		# get dirs and files list
-		list_dirs  = get_subdirs(self.path)
-		list_files = get_subfiles(self.path)
+		list_dirs  = get_subdirs(path)
+		list_files = get_subfiles(path)
 		
 		# add dir menu items
-		for d in sorted(get_subdirs(path)):
+		for d in sorted(list_dirs):
 			self.append_dir(path, d, sub)
 		
 		# add separator
 		if len(list_dirs) and len(list_files):
-			self.append_separator(self.menu)
+			self.append_separator(sub)
 
 		# add file menu items
-		for f in sorted(get_subfiles(path)):
+		for f in sorted(list_files):
 			self.append_file(path, f, sub)
 
 		widget.set_submenu(sub)
@@ -181,13 +183,13 @@ def gtk_main_thread():
 
 if __name__ == "__main__":
 
-#	# start gui thread
-#	gtk_thread = threading.Thread(target = gtk_main_thread)
-#	gtk_thread.setDaemon(True)
-#	gtk_thread.start()
+	# start gui thread
+	gtk_thread = threading.Thread(target = gtk_main_thread)
+	gtk_thread.setDaemon(True)
+	gtk_thread.start()
 
 	# start indicator thread
 	indicator = PanelElement()
 	
-	gtk.main()
+#	gtk.main()
 	
