@@ -71,14 +71,6 @@ class PanelElement:
 		# initialize empty menu
 		self.menu = gtk.Menu()
 		
-		# add time menu item
-		new_item = gtk.MenuItem(str(refresh_time), False)
-		new_item.show()
-		self.menu.append(new_item)
-
-		# add separator
-		self.append_separator(self.menu)
-		
 		# get dirs and files list
 		list_dirs  = get_subdirs(self.path)
 		list_files = get_subfiles(self.path)
