@@ -28,7 +28,7 @@ APP_LABEL = "Folder"
 DEF_EDITOR = "gedit"
 
 UPDATE_FREQ = 5 # in seconds
-PATH_ICON = 'folder' #__file__+'-icon.svg'
+PATH_ICON = 'folder-symbolic' #__file__+'-icon.svg'
 PATH_CONF = __file__+'-conf.xml'
 
 class PanelElement:
@@ -99,6 +99,12 @@ class PanelElement:
 		restart_item.show()
 		self.menu.append(restart_item)
 
+		# add quit menu item
+		quit_item = gtk.MenuItem("Quit", False)
+		quit_item.connect("activate", self.quit)
+		quit_item.show()
+		self.menu.append(quit_item)
+
 		# link menu to indicator
 		self.ind.set_menu(self.menu)
 		
@@ -107,9 +113,9 @@ class PanelElement:
 		threading.Timer(UPDATE_FREQ, self.dummy_update).start()
 		
 	#### MENU APPEND FUNCTIONS #################################################
-		
+	
 	def append_dir(self, path, d, father):
-		d_item = gtk.MenuItem(d, False)
+		d_item = gtk.MenuItem(strcut(d,60), False)
 		d_item.set_tooltip_text(path+"/"+d)
 		d_item.connect("activate", self.item_expand)
 		d_item.show()
@@ -120,7 +126,7 @@ class PanelElement:
 		d_item.set_submenu(menu_sub)
 		
 	def append_file(self, path, f, father):
-		f_item = gtk.MenuItem(f, False)
+		f_item = gtk.MenuItem(strcut(f,60), False)
 		f_item.set_tooltip_text(path+"/"+f)
 		f_item.connect("activate", self.item_xdgopen)
 		f_item.show()
@@ -168,6 +174,12 @@ class PanelElement:
 ################################################################################
 ################################################################################
 
+def strcut(string, maxlen):
+	if len(string) < maxlen:
+		return string
+	else:
+		return string[:maxlen].rsplit(' ', 1)[0]+' ...'
+
 def get_subdirs(path):
 	return [f for f in listdir(path) if isdir(join(path, f)) and not f.startswith('.') and not f.endswith('~')]
 
@@ -185,7 +197,7 @@ if __name__ == "__main__":
 
 	# start gui thread
 	gtk_thread = threading.Thread(target = gtk_main_thread)
-	gtk_thread.setDaemon(True)
+	#gtk_thread.setDaemon(True)
 	gtk_thread.start()
 
 	# start indicator thread
