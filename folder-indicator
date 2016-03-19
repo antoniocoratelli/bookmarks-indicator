@@ -11,10 +11,9 @@ do
 	)
 done
 
-
-python "$0.py"
+python "$0.py" "$@"
 
 while [[ $? == 2 ]]
 do
-	python "$0.py"
+	python "$0.py" "$@"
 done
