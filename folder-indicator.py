@@ -33,43 +33,29 @@ PATH_CONF = __file__+'-conf.xml'
 
 class PanelElement:
 
-	def __init__(self):
+	def __init__(self, _title, _path):
+
+		if not isdir(_path):
+			print "supplied path is not a dir"
+			sys.exit(1)
+		
+		self.title = _title
+		self.path  = _path
+
+		self.refresh_menu()
+		self.dummy_update()
+
+	def refresh_menu(self):
+		
+		# initialize app indicator
 		self.ind = appindicator.Indicator(
 			APP_NAME,
 			PATH_ICON,
 			appindicator.CATEGORY_APPLICATION_STATUS
 		)
-		self.ind.set_label(APP_LABEL)
+		self.ind.set_label(self.title)
 		self.ind.set_status(appindicator.STATUS_ACTIVE)
 
-		DOMTree = xml.dom.minidom.parse(PATH_CONF)
-		collection = DOMTree.documentElement
-		
-		configs = collection.getElementsByTagName("config")
-
-		for c in configs:
-			if not c.hasAttribute("title"):
-				print "bad config, missing config:title"
-				sys.exit(1)
-
-			if not c.hasAttribute("path"):
-				print "bad config, missing config:path"
-				sys.exit(1)
-				
-			print c.getAttribute("title")
-			print c.getAttribute("path")
-			self.ind.set_label(c.getAttribute("title"))
-			self.path = c.getAttribute("path")
-			
-		if not isdir(self.path):
-			print "supplied path is not a dir"
-
-		self.refresh_menu()
-		
-		self.dummy_update()
-
-	def refresh_menu(self):
-	
 		# initialize empty menu
 		self.menu = gtk.Menu()
 		
@@ -118,6 +104,7 @@ class PanelElement:
 		d_item = gtk.MenuItem(strcut(d,60), False)
 		d_item.set_tooltip_text(path+"/"+d)
 		d_item.connect("activate", self.item_expand)
+		d_item.connect("deselect", self.item_unexpand)
 		d_item.show()
 		father.append(d_item)
 		# add dummy separator
@@ -139,14 +126,25 @@ class PanelElement:
 		
 	############################################################################
 	
-	def item_expand(self, widget):
+	def item_unexpand(self, widget):
+		print "asd"
 
+	def item_expand(self, widget):
+	
 		path = widget.get_tooltip_text()
 		sub = gtk.Menu()
 
 		# get dirs and files list
 		list_dirs  = get_subdirs(path)
 		list_files = get_subfiles(path)
+		
+		widget.set_submenu(sub)
+
+		# add dot dir
+		self.append_file(path, ".", sub)
+		
+		if len(list_dirs) or len(list_files):
+			self.append_separator(sub)
 		
 		# add dir menu items
 		for d in sorted(list_dirs):
@@ -160,7 +158,6 @@ class PanelElement:
 		for f in sorted(list_files):
 			self.append_file(path, f, sub)
 
-		widget.set_submenu(sub)
 	
 	def item_xdgopen(self, widget):
 		os.system('xdg-open "'+widget.get_tooltip_text()+'" &')
@@ -195,13 +192,18 @@ def gtk_main_thread():
 
 if __name__ == "__main__":
 
+	# check command args
+	if not len(sys.argv) == 3:
+		print "indicator title and path required"
+		sys.exit(1)
+		
 	# start gui thread
 	gtk_thread = threading.Thread(target = gtk_main_thread)
 	#gtk_thread.setDaemon(True)
 	gtk_thread.start()
 
 	# start indicator thread
-	indicator = PanelElement()
+	indicator = PanelElement(sys.argv[1], sys.argv[2])
 	
 #	gtk.main()
 	
