@@ -130,7 +130,6 @@ class PanelElement:
 		print "asd"
 
 	def item_expand(self, widget):
-	
 		path = widget.get_tooltip_text()
 		sub = gtk.Menu()
 
@@ -157,7 +156,6 @@ class PanelElement:
 		# add file menu items
 		for f in sorted(list_files):
 			self.append_file(path, f, sub)
-
 	
 	def item_xdgopen(self, widget):
 		os.system('xdg-open "'+widget.get_tooltip_text()+'" &')
