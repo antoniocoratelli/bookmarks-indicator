@@ -63,6 +63,12 @@ class PanelElement:
 		list_dirs  = get_subdirs(self.path)
 		list_files = get_subfiles(self.path)
 		
+		# add dot dirs
+		self.append_file(self.path, ".", self.menu)
+		
+		# add separator
+		self.append_separator(self.menu)
+		
     	# add dir menu items
 		for d in sorted(list_dirs):
 			self.append_dir(self.path, d, self.menu)
