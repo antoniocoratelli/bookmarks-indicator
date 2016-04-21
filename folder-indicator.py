@@ -79,7 +79,7 @@ class PanelElement:
 
 		# add file menu items
 		for f in sorted(list_files):
-			self.append_file(self.path, d, self.menu)
+			self.append_file(self.path, f, self.menu)
 
 		# add separator
 		if len(list_files):
