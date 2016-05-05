@@ -64,7 +64,8 @@ class PanelElement:
 		list_files = get_subfiles(self.path)
 		
 		# add dot dirs
-		self.append_file(self.path, ".", self.menu)
+		self.append_dot_nautilus(self.path, ".", self.menu)
+		self.append_dot_terminal(self.path, ".", self.menu)
 		
 		# add separator
 		self.append_separator(self.menu)
@@ -125,6 +126,20 @@ class PanelElement:
 		f_item.show()
 		father.append(f_item)
 		
+	def append_dot_nautilus(self, path, f, father):
+		f_item = gtk.MenuItem('.', False)
+		f_item.set_tooltip_text(path+"/"+f)
+		f_item.connect("activate", self.item_xdgopen)
+		f_item.show()
+		father.append(f_item)
+		
+	def append_dot_terminal(self, path, f, father):
+		f_item = gtk.MenuItem('. $', False)
+		f_item.set_tooltip_text(path+"/"+f)
+		f_item.connect("activate", self.item_terminalopen)
+		f_item.show()
+		father.append(f_item)
+
 	def append_separator(self, father):
 		separator = gtk.SeparatorMenuItem()
 		separator.show()
@@ -146,7 +161,8 @@ class PanelElement:
 		widget.set_submenu(sub)
 
 		# add dot dir
-		self.append_file(path, ".", sub)
+		self.append_dot_nautilus(path, ".", sub)
+		self.append_dot_terminal(path, ".", sub)
 		
 		if len(list_dirs) or len(list_files):
 			self.append_separator(sub)
@@ -164,8 +180,11 @@ class PanelElement:
 			self.append_file(path, f, sub)
 	
 	def item_xdgopen(self, widget):
-		os.system('xdg-open "'+widget.get_tooltip_text()+'" &')
-		
+		os.system('xdg-open "'+widget.get_tooltip_text().replace('"','\\"')+'" &')
+	
+	def item_terminalopen(self, widget):
+		os.system('(cd "'+widget.get_tooltip_text().replace('"','\\"')+'" && gnome-terminal)&')
+	
 	def quit(self, widget):
 		sys.exit(0)
 		
