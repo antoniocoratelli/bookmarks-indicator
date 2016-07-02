@@ -33,8 +33,8 @@ class BookmarksIndicator:
         self.label = ""
         self.opener = "xdg-open"
         self.path = os.path.dirname(os.path.realpath(__file__))
-        self.icon = self.path + "/icons/1467483987_78.svg"
-        self.config = self.path + "/config"
+        self.icon = os.path.join(self.path, "icons", "black.svg")
+        self.config = os.path.join(self.path, "config")
         with open(self.config) as f:
             self.folders = [os.path.expandvars(x.strip('\n')) for x in f.readlines()]
         
