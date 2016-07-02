@@ -6,13 +6,15 @@ import signal
 
 import gtk
 import appindicator as ai
+import argparse
 
 import subprocess
 
+
 class BookmarksIndicator:
 
-    def __init__(self):
-        self.get_config()
+    def __init__(self, args):
+        self.set_config(args)
         self.init_indicator()
         self.append_menu_items()
         self.append_base_items()
@@ -28,13 +30,12 @@ class BookmarksIndicator:
     def quit(self, widget):
         sys.exit(0)
     
-    def get_config(self):
+    def set_config(self, args):
         self.title = "BookmarksIndicator"
-        self.label = ""
-        self.opener = "xdg-open"
-        self.path = os.path.dirname(os.path.realpath(__file__))
-        self.icon = os.path.join(self.path, "icons", "black.svg")
-        self.config = os.path.join(self.path, "config")
+        self.label = args.label
+        self.opener = args.opener
+        self.icon = args.icon
+        self.config = args.config
         with open(self.config) as f:
             self.folders = [os.path.expandvars(x.strip('\n')) for x in f.readlines()]
         
@@ -114,5 +115,22 @@ def get_subfiles(path):
     return out
 
 
-if __name__ == "__main__": i = BookmarksIndicator()
+if __name__ == "__main__":
+
+    script_path = os.path.dirname(os.path.realpath(__file__))
+    default_config = os.path.join(script_path, "config")
+    default_label = ""
+    default_opener = "xdg-open"
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-w", action="store_true", dest="white_icon", help="use white icon (default uses black icon)")
+    parser.add_argument("-c", action="store", dest="config", default=default_config, help="config file path (default: '%s')" % default_config)
+    parser.add_argument("-l", action="store", dest="label",  default=default_label,  help="indicator label (default: '%s')" % default_label)
+    parser.add_argument("-o", action="store", dest="opener", default=default_opener, help="file opener (default: '%s')" % default_opener)
+    args = parser.parse_args()
+    
+    if args.white_icon: args.icon = os.path.join(script_path, "icons", "white.svg")
+    else:               args.icon = os.path.join(script_path, "icons", "black.svg")
+    
+    i = BookmarksIndicator(args)
 
