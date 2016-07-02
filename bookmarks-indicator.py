@@ -122,7 +122,7 @@ if __name__ == "__main__":
     default_label = ""
     default_opener = "xdg-open"
     
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(epilog='(C) 2016, Antonio Coratelli. Released under BSD 3-Clause License.')
     parser.add_argument("-w", action="store_true", dest="white_icon", help="use white icon (default uses black icon)")
     parser.add_argument("-c", action="store", dest="config", default=default_config, help="config file path (default: '%s')" % default_config)
     parser.add_argument("-l", action="store", dest="label",  default=default_label,  help="indicator label (default: '%s')" % default_label)
