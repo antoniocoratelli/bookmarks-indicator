@@ -98,8 +98,8 @@ class BookmarksIndicator:
 def get_subdirs(path):
     out = []
     for f in os.listdir(path):
-        if os.path.isdir(os.path.join(path, f)) \
-        and not f.startswith('.') \
+        if os.path.isdir(os.path.join(path, f))\
+        and not f.startswith('.')\
         and not f.endswith('~'):
             out.append(f)
     return out
@@ -107,8 +107,8 @@ def get_subdirs(path):
 def get_subfiles(path):
     out = []
     for f in os.listdir(path):
-        if os.path.isfile(os.path.join(path, f)) \
-        and not f.startswith('.') \
+        if os.path.isfile(os.path.join(path, f))\
+        and not f.startswith('.')\
         and not f.endswith('~'):
             out.append(f)
     return out
