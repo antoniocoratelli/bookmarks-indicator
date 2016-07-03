@@ -26,9 +26,6 @@ class BookmarksIndicator:
         self.append_base_items()
         self.show()
     
-    def __del__(self):
-        self.icon.close()
-
     def show(self):
         gtk.main()
 
