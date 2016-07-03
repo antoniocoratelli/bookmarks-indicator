@@ -63,11 +63,13 @@ class BookmarksIndicator:
     
     def append_base_items(self):
         s = gtk.SeparatorMenuItem()
-        q = gtk.MenuItem("Quit")
+        l = gtk.MenuItem("GitHub")
         r = gtk.MenuItem("Restart")
+        q = gtk.MenuItem("Quit")
+        l.connect("activate", self.onclick, "https://github.com/antoniocoratelli/bookmarks-indicator")
         r.connect("activate", self.restart)
         q.connect("activate", self.quit)
-        for i in [s, r, q]: i.show(); self.menu.append(i)
+        for i in [s, l, r, q]: i.show(); self.menu.append(i)
 
     def append_separator(self, widget):
         sep = gtk.SeparatorMenuItem()
