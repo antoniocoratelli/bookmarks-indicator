@@ -8,12 +8,20 @@ Environment variables like `$HOME` are expanded.
 
 ## usage
 ```
-usage: bookmarks-indicator.py [-h] [-w] [-c CONFIG] [-l LABEL] [-o OPENER]
+usage: bookmarks-indicator.py [-h] [-i COLOR] [-c CONFIG] [-l LABEL]
+                              [-o OPENER]
 
 optional arguments:
   -h, --help  show this help message and exit
-  -w          use white icon (default uses black icon)
-  -c CONFIG   config file path (default: '<script-path>/config')
+  -i COLOR    icon color (default: '#010101')
+  -c CONFIG   config file path (default: '/home/gunter/Coding/bookmarks-
+              indicator/config')
   -l LABEL    indicator label (default: '')
   -o OPENER   file opener (default: 'xdg-open')
+
+Copyright (c) 2016, Antonio Coratelli.
+Released under BSD 3-Clause License. See 'LICENSE' file.
+
+Icon extracted from "WPZOOM Developer Icon Set" by WPZOOM.
+http://www.wpzoom.com/wpzoom/new-freebie-wpzoom-developer-icon-set-154-free-icons
 ```
