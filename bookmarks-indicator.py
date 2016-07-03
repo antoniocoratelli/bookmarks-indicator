@@ -1,14 +1,20 @@
 #!/usr/bin/env python
+'''
+Copyright (c) 2016, Antonio Coratelli.
+Released under BSD 3-Clause License. See 'LICENSE' file.
 
+Icon extracted from "WPZOOM Developer Icon Set" by WPZOOM.
+http://www.wpzoom.com/wpzoom/new-freebie-wpzoom-developer-icon-set-154-free-icons
+'''
 import os
 import sys
 import signal
+import tempfile
+import subprocess
 
 import gtk
 import appindicator as ai
 import argparse
-
-import subprocess
 
 
 class BookmarksIndicator:
@@ -19,23 +25,27 @@ class BookmarksIndicator:
         self.append_menu_items()
         self.append_base_items()
         self.show()
+    
+    def __del__(self):
+        self.icon.close()
 
     def show(self):
         gtk.main()
 
     def restart(self, widget):
         gtk.main_quit();
-        self.__init__()
+        self.__init__(self.args)
     
     def quit(self, widget):
-        sys.exit(0)
+        gtk.main_quit();
     
     def set_config(self, args):
-        self.title = "BookmarksIndicator"
-        self.label = args.label
-        self.opener = args.opener
-        self.icon = args.icon
-        self.config = args.config
+        self.args = args
+        self.title = "bookmarks-indicator"
+        self.label = self.args.label
+        self.opener = self.args.opener
+        self.icon = self.args.icon
+        self.config = self.args.config
         with open(self.config) as f:
             self.folders = [os.path.expandvars(x.strip('\n')) for x in f.readlines()]
         
@@ -121,16 +131,21 @@ if __name__ == "__main__":
     default_config = os.path.join(script_path, "config")
     default_label = ""
     default_opener = "xdg-open"
-    
-    parser = argparse.ArgumentParser(epilog='(C) 2016, Antonio Coratelli. Released under BSD 3-Clause License.')
-    parser.add_argument("-w", action="store_true", dest="white_icon", help="use white icon (default uses black icon)")
+    default_color = "#010101"
+
+    parser = argparse.ArgumentParser(epilog=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("-i", action="store", dest="color",  default=default_color,  help="icon color (default: '%s')" % default_color)
     parser.add_argument("-c", action="store", dest="config", default=default_config, help="config file path (default: '%s')" % default_config)
     parser.add_argument("-l", action="store", dest="label",  default=default_label,  help="indicator label (default: '%s')" % default_label)
     parser.add_argument("-o", action="store", dest="opener", default=default_opener, help="file opener (default: '%s')" % default_opener)
     args = parser.parse_args()
     
-    if args.white_icon: args.icon = os.path.join(script_path, "icons", "white.svg")
-    else:               args.icon = os.path.join(script_path, "icons", "black.svg")
+    indicator_icon = '''<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg enable-background="new 0 0 500 500" height="500px" id="Layer_1" version="1.1" viewBox="0 0 500 500" width="500px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path clip-rule="evenodd" d="M68.29,68.29v363.421c0,20.078,16.264,36.34,36.343,36.34h304.363  c12.536,0,22.716-10.175,22.716-22.711c0-12.541-10.18-22.716-22.716-22.716H131.889c-9.996,0-18.17-8.18-18.17-18.172  c0-9.987,8.175-18.168,18.17-18.168h263.478c20.078,0,36.345-16.267,36.345-36.346V68.29c0-20.077-16.267-36.34-36.345-36.34  H268.172v163.45c0,2.36-0.905,4.719-2.636,6.538c-3.538,3.54-9.362,3.54-12.902,0c-2.363-2.457-38.976-32.89-38.976-32.89  s-36.612,30.433-38.977,32.89c-3.54,3.54-9.359,3.54-12.901,0c-1.725-1.819-2.635-4.178-2.635-6.538V31.949h-54.512  C84.553,31.949,68.29,48.213,68.29,68.29z" fill="####" fill-rule="evenodd"/></svg>'''
+    indicator_icon = indicator_icon.replace("####", str(args.color))
     
-    i = BookmarksIndicator(args)
-
+    with tempfile.NamedTemporaryFile(suffix='.svg') as icon:
+        icon.write(indicator_icon)
+        icon.flush()
+        args.icon = icon.name
+        bi = BookmarksIndicator(args)
+    
