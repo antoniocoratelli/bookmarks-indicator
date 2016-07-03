@@ -14,8 +14,7 @@ usage: bookmarks-indicator.py [-h] [-i COLOR] [-c CONFIG] [-l LABEL]
 optional arguments:
   -h, --help  show this help message and exit
   -i COLOR    icon color (default: '#010101')
-  -c CONFIG   config file path (default: '/home/gunter/Coding/bookmarks-
-              indicator/config')
+  -c CONFIG   config file path (default: '<script-path>/config')
   -l LABEL    indicator label (default: '')
   -o OPENER   file opener (default: 'xdg-open')
 
