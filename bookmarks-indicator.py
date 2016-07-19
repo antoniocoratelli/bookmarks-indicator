@@ -8,7 +8,6 @@ http://www.wpzoom.com/wpzoom/new-freebie-wpzoom-developer-icon-set-154-free-icon
 '''
 import os
 import sys
-import signal
 import tempfile
 import subprocess
 
