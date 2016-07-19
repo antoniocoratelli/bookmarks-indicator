@@ -6,6 +6,17 @@ Environment variables like `$HOME` are expanded.
 ## one image is worth a thousand words
 ![example](https://raw.githubusercontent.com/antoniocoratelli/bookmarks-indicator/master/res/animation.gif)
 
+## requirements
+
+This indicator requires the following modules:
+- `os`
+- `sys`
+- `tempfile`
+- `subprocess`
+- `gtk`
+- `appindicator`
+- `argparse`
+
 ## usage
 ```
 usage: bookmarks-indicator.py [-h] [-i COLOR] [-c CONFIG] [-l LABEL]
