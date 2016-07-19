@@ -37,6 +37,10 @@ class BookmarksIndicator:
         gtk.main_quit()
     
     def set_config(self, args):
+        '''
+        Apply the command-line arguments to the object and parse the
+        configuration file.
+        '''
         self.args = args
         self.title = "bookmarks-indicator"
         self.label = self.args.label
@@ -44,9 +48,14 @@ class BookmarksIndicator:
         self.icon = self.args.icon
         self.config = self.args.config
         with open(self.config) as f:
+            # for every line of the configuration file store the path in a list
+            # expanding environment variables
             self.folders = [os.path.expandvars(x.strip('\n')) for x in f.readlines()]
         
     def init_indicator(self):
+        '''
+        Set the basic properties (icon, label, ...) of the indicator.
+        '''
         self.menu = gtk.Menu()
         self.indicator = ai.Indicator(self.title, self.icon, ai.CATEGORY_APPLICATION_STATUS)
         self.indicator.set_label(self.label)
@@ -54,12 +63,18 @@ class BookmarksIndicator:
         self.indicator.set_menu(self.menu)
     
     def append_menu_items(self):
+        '''
+        Append all the folders specified in the configuration file to the menu.
+        '''
         for folder in self.folders:
             if not os.path.isdir(folder):
                 raise Exception("'%s' is not a folder" % folder)
             self.append_item(self.menu, folder)
     
     def append_base_items(self):
+        '''
+        Append Quit, Restart and GitHub link items to the menu.
+        '''
         s = gtk.SeparatorMenuItem()
         l = gtk.MenuItem("GitHub")
         r = gtk.MenuItem("Restart")
@@ -70,11 +85,17 @@ class BookmarksIndicator:
         for i in [s, l, r, q]: i.show(); self.menu.append(i)
 
     def append_separator(self, widget):
+        '''
+        Append a separator to a menu.
+        '''
         sep = gtk.SeparatorMenuItem()
         sep.show()
         widget.append(sep)
 	    
     def append_item(self, parent, path):
+        '''
+        Append a folder or a file to a menu.
+        '''
         name = os.path.basename(path)
         item = gtk.MenuItem(name, False)
         if os.path.isdir(path) and name != ".":
@@ -86,27 +107,48 @@ class BookmarksIndicator:
         parent.append(item)
     
     def append_dummy(self, widget):
+        '''
+        Insert a dummy separator in the submenu of a folder item.
+        Thanks to this function item representing folders always have an arrow,
+        and it is possible to expand the folder content only when the user
+        actually hovers the item.
+        '''
         submenu = gtk.Menu()
         self.append_separator(submenu)
     	widget.set_submenu(submenu)
     	return submenu
 	
     def onhover(self, widget, path, submenu):
+        '''
+        When the user hovers a folder item replace the dummy separator with the
+        actual content of the folder.
+        '''
         submenu = gtk.Menu()
     	widget.set_submenu(submenu)
         self.append_item(submenu, os.path.join(path, "."))
         list_dirs  = get_subdirs(path)
         list_files = get_subfiles(path)
-        if len(list_dirs) or len(list_files): self.append_separator(submenu)
-        for d in sorted(list_dirs): self.append_item(submenu, os.path.join(path, d))
-        if len(list_dirs) and len(list_files): self.append_separator(submenu)
-        for f in sorted(list_files): self.append_item(submenu, os.path.join(path, f))
+        if len(list_dirs) or len(list_files):
+            self.append_separator(submenu)
+        for d in sorted(list_dirs):
+            self.append_item(submenu, os.path.join(path, d))
+        if len(list_dirs) and len(list_files):
+            self.append_separator(submenu)
+        for f in sorted(list_files):
+            self.append_item(submenu, os.path.join(path, f))
 
     def onclick(self, widget, path):
+        '''
+        When the user clicks on a file, open it in the default program.
+        '''
         p = subprocess.Popen([self.opener, path])
 
 
 def get_subdirs(path):
+    '''
+    Get all the subdirectories of a given folder.
+    Output doesn't include hidden subdirectories.
+    '''
     out = []
     for f in os.listdir(path):
         if os.path.isdir(os.path.join(path, f))\
@@ -116,6 +158,10 @@ def get_subdirs(path):
     return out
 
 def get_subfiles(path):
+    '''
+    Get all the files in a given folder.
+    Output doesn't include hidden files.
+    '''
     out = []
     for f in os.listdir(path):
         if os.path.isfile(os.path.join(path, f))\
@@ -126,26 +172,31 @@ def get_subfiles(path):
 
 
 if __name__ == "__main__":
-
+    
+    # set the default variables for the argment parser
     script_path = os.path.dirname(os.path.realpath(__file__))
     default_config = os.path.join(script_path, "config")
     default_label = ""
     default_opener = "xdg-open"
     default_color = "#010101"
 
+    # initialize the argument parser object
     parser = argparse.ArgumentParser(epilog=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("-i", action="store", dest="color",  default=default_color,  help="icon color (default: '%s')" % default_color)
     parser.add_argument("-c", action="store", dest="config", default=default_config, help="config file path (default: '%s')" % default_config)
     parser.add_argument("-l", action="store", dest="label",  default=default_label,  help="indicator label (default: '%s')" % default_label)
     parser.add_argument("-o", action="store", dest="opener", default=default_opener, help="file opener (default: '%s')" % default_opener)
+    
     args = parser.parse_args()
     
+    # set the icon color as requested
     indicator_icon = '''<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg enable-background="new 0 0 500 500" height="500px" id="Layer_1" version="1.1" viewBox="0 0 500 500" width="500px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path clip-rule="evenodd" d="M68.29,68.29v363.421c0,20.078,16.264,36.34,36.343,36.34h304.363  c12.536,0,22.716-10.175,22.716-22.711c0-12.541-10.18-22.716-22.716-22.716H131.889c-9.996,0-18.17-8.18-18.17-18.172  c0-9.987,8.175-18.168,18.17-18.168h263.478c20.078,0,36.345-16.267,36.345-36.346V68.29c0-20.077-16.267-36.34-36.345-36.34  H268.172v163.45c0,2.36-0.905,4.719-2.636,6.538c-3.538,3.54-9.362,3.54-12.902,0c-2.363-2.457-38.976-32.89-38.976-32.89  s-36.612,30.433-38.977,32.89c-3.54,3.54-9.359,3.54-12.901,0c-1.725-1.819-2.635-4.178-2.635-6.538V31.949h-54.512  C84.553,31.949,68.29,48.213,68.29,68.29z" fill="####" fill-rule="evenodd"/></svg>'''
     indicator_icon = indicator_icon.replace("####", str(args.color))
     
+    # save the icon to a temporary file and start the indicator
     with tempfile.NamedTemporaryFile(suffix='.svg') as icon:
         icon.write(indicator_icon)
         icon.flush()
         args.icon = icon.name
         bi = BookmarksIndicator(args)
-    
+
