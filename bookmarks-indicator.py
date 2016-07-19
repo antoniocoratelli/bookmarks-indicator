@@ -30,11 +30,11 @@ class BookmarksIndicator:
         gtk.main()
 
     def restart(self, widget):
-        gtk.main_quit();
+        gtk.main_quit()
         self.__init__(self.args)
     
     def quit(self, widget):
-        gtk.main_quit();
+        gtk.main_quit()
     
     def set_config(self, args):
         self.args = args
