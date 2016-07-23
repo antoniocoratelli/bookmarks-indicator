@@ -66,9 +66,12 @@ class BookmarksIndicator:
         Append all the folders specified in the configuration file to the menu.
         '''
         for folder in self.folders:
-            if not os.path.isdir(folder):
+            if folder == '---':
+                self.append_separator(self.menu)
+            elif os.path.isdir(folder):
+                self.append_item(self.menu, folder)
+            else:
                 raise Exception("'%s' is not a folder" % folder)
-            self.append_item(self.menu, folder)
     
     def append_base_items(self):
         '''
