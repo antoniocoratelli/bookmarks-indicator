@@ -3,7 +3,6 @@ Bookmarks indicator for Ubuntu, written in Python.
 Just put in `config` file all the folders you want to bookmark (one per line).
 Environment variables like `$HOME` are expanded.
 
-## one image is worth a thousand words
 ![example](https://raw.githubusercontent.com/antoniocoratelli/bookmarks-indicator/master/res/animation.gif)
 
 ## requirements
