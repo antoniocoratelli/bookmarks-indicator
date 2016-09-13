@@ -28,6 +28,7 @@ optional arguments:
   -c CONFIG   config file path (default: '<script-path>/config')
   -l LABEL    indicator label (default: '')
   -o OPENER   file opener (default: 'xdg-open')
+  -t SHELL    shell (default: 'gnome-terminal')
 
 Copyright (c) 2016, Antonio Coratelli.
 Released under BSD 3-Clause License. See 'LICENSE' file.
