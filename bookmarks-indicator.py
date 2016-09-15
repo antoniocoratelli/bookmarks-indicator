@@ -73,6 +73,8 @@ class BookmarksIndicator:
                 self.append_separator(self.menu, folder[3:].strip())
             elif os.path.isdir(folder):
                 self.append_item(self.menu, folder)
+            elif os.path.isfile(folder):
+                self.append_item(self.menu, folder)
             else:
                 raise Exception("'%s' is not a folder" % folder)
 
