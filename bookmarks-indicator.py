@@ -69,6 +69,8 @@ class BookmarksIndicator:
         for folder in self.folders:
             if folder == '---':
                 self.append_separator(self.menu)
+            elif folder.startswith('---'):
+                self.append_separator(self.menu, folder[3:].strip())
             elif os.path.isdir(folder):
                 self.append_item(self.menu, folder)
             else:
@@ -87,13 +89,18 @@ class BookmarksIndicator:
         q.connect("activate", self.quit)
         for i in [s, l, r, q]: i.show(); self.menu.append(i)
 
-    def append_separator(self, widget):
+    def append_separator(self, widget, name=None):
         '''
         Append a separator to a menu.
         '''
         sep = gtk.SeparatorMenuItem()
         sep.show()
         widget.append(sep)
+        if name != None:
+            sep_title = gtk.MenuItem(name)
+            sep_title.set_sensitive(False)
+            sep_title.show()
+            widget.append(sep_title)
 
     def append_item(self, parent, path):
         '''
