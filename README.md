@@ -36,3 +36,7 @@ Released under BSD 3-Clause License. See 'LICENSE' file.
 Icon extracted from "WPZOOM Developer Icon Set" by WPZOOM.
 http://www.wpzoom.com/wpzoom/new-freebie-wpzoom-developer-icon-set-154-free-icons
 ```
+
+## support
+
+If you like this application, you can [share it](https://www.addtoany.com/share/#url=github.com/antoniocoratelli/bookmarks-indicator), [buy me a coffe](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GFD8AU9YJB36S), or just say thanks adding a [ star](https://github.com/antoniocoratelli/bookmarks-indicator/stargazers) :)
