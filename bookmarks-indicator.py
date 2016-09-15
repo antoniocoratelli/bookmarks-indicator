@@ -76,7 +76,7 @@ class BookmarksIndicator:
             elif os.path.isfile(folder):
                 self.append_item(self.menu, folder)
             else:
-                raise Exception("'%s' is not a folder" % folder)
+                raise Exception("'%s' is not a folder or a file" % folder)
 
     def append_base_items(self):
         '''
