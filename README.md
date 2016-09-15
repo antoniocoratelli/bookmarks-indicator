@@ -19,8 +19,7 @@ This indicator requires the following modules:
 
 ## usage
 ```
-usage: bookmarks-indicator.py [-h] [-i COLOR] [-c CONFIG] [-l LABEL]
-                              [-o OPENER]
+usage: bookmarks-indicator.py [-h] [OPTIONS]
 
 optional arguments:
   -h, --help  show this help message and exit
