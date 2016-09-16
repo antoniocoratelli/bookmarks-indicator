@@ -47,6 +47,7 @@ class BookmarksIndicator:
         self.icon = self.args.icon
         self.config = self.args.config
         self.shell = self.args.shell
+        self.executables = self.args.ext
         with open(self.config) as f:
             # for every line of the configuration file store the path in a list
             # expanding environment variables
@@ -168,7 +169,11 @@ class BookmarksIndicator:
         '''
         When the user clicks on a file, open it in the default program.
         '''
-        p = subprocess.Popen([self.opener, path])
+        _, extension = os.path.splitext(path)
+        if extension in self.executables:
+            p = subprocess.Popen([path])
+        else:
+            p = subprocess.Popen([self.opener, path])
 
     def onshell(self, widget, path):
         '''
@@ -221,6 +226,7 @@ if __name__ == "__main__":
     parser.add_argument("-l", action="store", dest="label",  default=default_label,  help="indicator label (default: '%s')" % default_label)
     parser.add_argument("-o", action="store", dest="opener", default=default_opener, help="file opener (default: '%s')" % default_opener)
     parser.add_argument("-t", action="store", dest="shell",  default=default_shell,  help="shell (default: '%s')" % default_shell)
+    parser.add_argument("-x", action="append", dest="ext",   default=[],             help="execute -- instead of open in editor -- files with chosen extension (default: disabled) for example '-x \".sh\" -x \".py\"' will execute bash and python scripts (ensure they have file execute permission)")
 
     args = parser.parse_args()
 
