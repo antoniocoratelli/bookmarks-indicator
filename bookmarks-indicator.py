@@ -211,6 +211,8 @@ def get_subfiles(path):
 
 if __name__ == "__main__":
 
+    usage = "%s [OPTIONS]" % os.path.basename(__file__)
+
     # set the default variables for the argment parser
     script_path = os.path.dirname(os.path.realpath(__file__))
     default_config = os.path.join(script_path, "config")
@@ -220,7 +222,7 @@ if __name__ == "__main__":
     default_color = "#010101"
 
     # initialize the argument parser object
-    parser = argparse.ArgumentParser(epilog=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(usage=usage, epilog=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("-i", action="store", dest="color",  default=default_color,  help="icon color (default: '%s')" % default_color)
     parser.add_argument("-c", action="store", dest="config", default=default_config, help="config file path (default: '%s')" % default_config)
     parser.add_argument("-l", action="store", dest="label",  default=default_label,  help="indicator label (default: '%s')" % default_label)
