@@ -169,8 +169,7 @@ class BookmarksIndicator:
         '''
         When the user clicks on a file, open it in the default program.
         '''
-        _, extension = os.path.splitext(path)
-        if extension in self.executables:
+        if path.endswith(tuple(self.executables)):
             p = subprocess.Popen([path])
         else:
             p = subprocess.Popen([self.opener, path])
