@@ -12,7 +12,7 @@ Bookmarks indicator for Ubuntu, written in Python.
 
 ## brief guide
 
-- Put in `config` file all the folders you want to bookmark, one per line;
+- Put in `config` all the folders and files you want to bookmark, one per line;
   environment variables like `$HOME` are expanded;
 - Use `---` or `--- Some Header` where you want to place a menu separator;
 - Open a terminal in the folder containing `bookmarks-indicator.py`;
