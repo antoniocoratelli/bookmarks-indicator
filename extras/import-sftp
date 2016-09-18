@@ -1,0 +1,55 @@
+#!/bin/bash
+
+#this will look at your nautilus sFTP bookmarks
+#and add them to the bookmarks-indicator
+
+#find the working directory where this script is
+DIR=( `dirname "$(readlink -f "$0")"` )
+#cd into the working directory
+cd  $DIR
+cd .. -
+
+       #check if sftp directory exists. if not create it
+       if [ ! -d "sftp" ]; then
+       mkdir -p sftp ;
+       fi
+
+#read through the bookmarks and create an sftp file for each sFTP bookmark
+cat ~/.config/gtk-3.0/bookmarks | while read f1 f2
+do
+#check if bookmark is an sftp bookmark
+if [[ $f1 == *"sftp://"* ]]
+ then
+	#check if that bookmark file exists so we dont overwrite existing bookmarks
+	if [ ! -f "sftp/$f2.sftp" ]; then
+		#if not create it and add the commands and sftp path
+		touch "sftp/$f2.sftp"
+		echo  "#!/bin/bash" >>  "sftp/$f2.sftp"
+		echo  "nautilus $f1" >>  "sftp/$f2.sftp"
+		#make it executable
+		chmod +x "sftp/$f2.sftp"
+	fi
+fi
+done
+
+
+#check if config has ---sFTP section
+if grep -Fq "sFTP" config
+	 then 
+	  :
+	  else 
+	  #if not add it to config
+	  echo "---sFTP" >> config
+fi
+
+#finally check if bookmarks exist in config and add them if they do not
+for entry in "sftp"/*
+do
+	if grep -Fq $DIR/"$entry" config
+	 then 
+  	   :
+	   else
+	   #add to config
+	   echo $DIR/"$entry" >> config
+	fi
+done
