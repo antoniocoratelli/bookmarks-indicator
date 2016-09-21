@@ -227,7 +227,7 @@ if __name__ == "__main__":
     parser.add_argument("-l", action="store", dest="label",  default=default_label,  help="indicator label (default: '%s')" % default_label)
     parser.add_argument("-o", action="store", dest="opener", default=default_opener, help="file opener (default: '%s')" % default_opener)
     parser.add_argument("-t", action="store", dest="shell",  default=default_shell,  help="shell (default: '%s')" % default_shell)
-    parser.add_argument("-x", action="append", dest="ext",   default=[],             help="execute -- instead of open in editor -- files with chosen extension (default: disabled) for example '-x \".sh\" -x \".py\"' will execute bash and python scripts (ensure they have file execute permission)")
+    parser.add_argument("-x", action="append", dest="ext",   default=[],             help="execute -- instead of open in editor -- files with chosen extension (default: disabled) for example '-x \".sh\" -x \".py\"' will execute bash and python scripts (ensure they have file execution permission)")
 
     args = parser.parse_args()
 

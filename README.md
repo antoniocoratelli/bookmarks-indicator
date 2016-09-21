@@ -46,6 +46,10 @@ ones using `pip` ([link][pip]).
       -l LABEL    indicator label (default: '')
       -o OPENER   file opener (default: 'xdg-open')
       -t SHELL    shell (default: 'gnome-terminal')
+      -x EXT      execute -- instead of open in editor -- files with chosen
+                  extension (default: disabled) for example '-x ".sh" -x ".py"'
+                  will execute bash and python scripts (ensure they have file
+                  execution permission)
 
     Copyright (c) 2016, Antonio Coratelli.
     Released under BSD 3-Clause License. See 'LICENSE' file.
