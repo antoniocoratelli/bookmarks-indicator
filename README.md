@@ -32,8 +32,8 @@ Example of a `config` file:
 ## Requirements
 
 This indicator requires the following python modules: `os`, `sys`, `tempfile`,
-`subprocess`, `gtk`, `appindicator`, `argparse`. You can install the missing
-ones using `pip` ([link][pip]).
+`subprocess`, `gtk`, `appindicator`, `argparse`.
+You can install the missing ones using `pip` ([link][pip]).
 
 ## Advanced Usage
 
