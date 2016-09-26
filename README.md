@@ -10,7 +10,7 @@ Bookmarks indicator for Ubuntu, written in Python.
 >
 > _[OMG! Ubuntu!][omgubuntu] Post_
 
-## brief guide
+## Brief Guide
 
 - Put in `config` all the folders and files you want to bookmark, one per line;
   environment variables like `$HOME` are expanded;
@@ -29,13 +29,13 @@ Example of a `config` file:
     ---
     $HOME/Documents/TodoList.txt
 
-## requirements
+## Requirements
 
 This indicator requires the following python modules: `os`, `sys`, `tempfile`,
 `subprocess`, `gtk`, `appindicator`, `argparse`. You can install the missing
 ones using `pip` ([link][pip]).
 
-## advanced usage
+## Advanced Usage
 
     usage: bookmarks-indicator.py [OPTIONS]
 
@@ -57,7 +57,7 @@ ones using `pip` ([link][pip]).
     Icon extracted from "WPZOOM Developer Icon Set" by WPZOOM.
     http://www.wpzoom.com/wpzoom/new-freebie-wpzoom-developer-icon-set-154-free-icons
 
-## support
+## Support
 
 If you like this application, you can [share it](https://www.addtoany.com/share/#url=github.com/antoniocoratelli/bookmarks-indicator), [buy me a coffe](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GFD8AU9YJB36S), or just say thanks adding a [ star](https://github.com/antoniocoratelli/bookmarks-indicator/stargazers) :)
 
