@@ -59,9 +59,15 @@ ones using `pip` ([link][pip]).
 
 ## Support
 
-If you like this application, you can [share it](https://www.addtoany.com/share/#url=github.com/antoniocoratelli/bookmarks-indicator), [buy me a coffe](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GFD8AU9YJB36S), or just say thanks adding a [ star](https://github.com/antoniocoratelli/bookmarks-indicator/stargazers) :)
+If you like this application, you can [share it][support_share],
+[buy me a coffe][support_paypal], or just say thanks adding a
+[star][support_star] :)
 
 
 [animation]: https://raw.githubusercontent.com/antoniocoratelli/bookmarks-indicator/master/res/animation.gif
 [omgubuntu]: http://www.omgubuntu.co.uk/2016/09/simple-bookmarks-indicator-ubuntu-desktop
 [pip]: https://wiki.python.org/moin/CheeseShopTutorial#Installing_Distributions
+
+[support_share]:  https://www.addtoany.com/share/#url=github.com/antoniocoratelli/bookmarks-indicator
+[support_star]:   https://github.com/antoniocoratelli/bookmarks-indicator/stargazers
+[support_paypal]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GFD8AU9YJB36S
