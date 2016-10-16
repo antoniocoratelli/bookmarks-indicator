@@ -222,7 +222,7 @@ if __name__ == "__main__":
 
     # initialize the argument parser object
     parser = argparse.ArgumentParser(usage=usage, epilog=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("-i", action="store", dest="color",  default=default_color,  help="icon color (default: '%s'); accepts all HTML color values, such as '#FF0000' or 'red'; when using hex colors make shure to quote them, otherwise shell bash will interpret everything following # as a comment" % default_color)
+    parser.add_argument("-i", action="store", dest="color",  default=default_color,  help="icon color (default: '%s'); accepts all HTML color values, such as '#FF0000' or 'red'; when using hex colors make sure to quote them, otherwise shell bash will interpret everything following # as a comment" % default_color)
     parser.add_argument("-c", action="store", dest="config", default=default_config, help="config file path (default: '%s')" % default_config)
     parser.add_argument("-l", action="store", dest="label",  default=default_label,  help="indicator label (default: '%s')" % default_label)
     parser.add_argument("-o", action="store", dest="opener", default=default_opener, help="file opener (default: '%s')" % default_opener)

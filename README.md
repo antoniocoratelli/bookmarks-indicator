@@ -43,7 +43,7 @@ usage: bookmarks-indicator.py [OPTIONS]
 optional arguments:
   -h, --help  show this help message and exit
   -i COLOR    icon color (default: '#010101'); accepts all HTML color values,
-              such as '#FF0000' or 'red'; when using hex colors make shure to
+              such as '#FF0000' or 'red'; when using hex colors make sure to
               quote them, otherwise shell bash will interpret everything
               following # as a comment
   -c CONFIG   config file path (default: '<script-path>/config')
