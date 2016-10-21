@@ -26,6 +26,7 @@ Example of a `config` file:
     $HOME/Music
     $HOME/Pictures
     $HOME/Videos
+    /media/user/DRIVE
     ---
     $HOME/Documents/TodoList.txt
 
