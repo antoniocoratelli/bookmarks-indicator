@@ -240,4 +240,15 @@ if __name__ == "__main__":
         icon.write(indicator_icon)
         icon.flush()
         args.icon = icon.name
-        bi = BookmarksIndicator(args)
+        try:
+            bi = BookmarksIndicator(args)
+        except Exception as e:
+            message = "Error:\n\n%s\n\nDo you want to edit the config file?" % str(e)
+            print message
+            mbox = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_YES_NO)
+            mbox.set_title("bookmarks-indicator")
+            mbox.set_markup(message)
+            if mbox.run() == gtk.RESPONSE_YES:
+                print "Opening the configuration file ..."
+                p = subprocess.Popen([args.opener, args.config])
+            print "Will now quit."
