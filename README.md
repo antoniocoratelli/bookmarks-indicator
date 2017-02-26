@@ -76,4 +76,4 @@ If you like this application, you can [share it][support_share],
 
 [support_share]:  https://www.addtoany.com/share/#url=github.com/antoniocoratelli/bookmarks-indicator
 [support_star]:   https://github.com/antoniocoratelli/bookmarks-indicator/stargazers
-[support_paypal]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GFD8AU9YJB36S
+[support_paypal]: https://paypal.me/antoniocoratelli
