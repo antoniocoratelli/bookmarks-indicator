@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 '''
 Copyright (c) 2016, Antonio Coratelli.
 Released under BSD 3-Clause License. See 'LICENSE' file.
@@ -11,8 +11,11 @@ import sys
 import tempfile
 import subprocess
 
-import gtk
-import appindicator as ai
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('AppIndicator3', '0.1')
+from gi.repository import Gtk as gtk
+from gi.repository import AppIndicator3 as ai
 import argparse
 
 
@@ -58,9 +61,9 @@ class BookmarksIndicator:
         Set the basic properties (icon, label, ...) of the indicator.
         '''
         self.menu = gtk.Menu()
-        self.indicator = ai.Indicator(self.title, self.icon, ai.CATEGORY_APPLICATION_STATUS)
-        self.indicator.set_label(self.label)
-        self.indicator.set_status(ai.STATUS_ACTIVE)
+        self.indicator = ai.Indicator.new(self.title, self.icon, ai.IndicatorCategory.APPLICATION_STATUS)
+        self.indicator.set_label(self.label, self.label)
+        self.indicator.set_status(ai.IndicatorStatus.ACTIVE)
         self.indicator.set_menu(self.menu)
 
     def append_menu_items(self):
@@ -143,8 +146,8 @@ class BookmarksIndicator:
         '''
         submenu = gtk.Menu()
         self.append_separator(submenu)
-    	widget.set_submenu(submenu)
-    	return submenu
+        widget.set_submenu(submenu)
+        return submenu
 
     def onhover(self, widget, path, submenu):
         '''
@@ -152,7 +155,7 @@ class BookmarksIndicator:
         actual content of the folder.
         '''
         submenu = gtk.Menu()
-    	widget.set_submenu(submenu)
+        widget.set_submenu(submenu)
         self.append_item(submenu, os.path.join(path, "."))
         list_dirs  = get_subdirs(path)
         list_files = get_subfiles(path)
@@ -237,18 +240,18 @@ if __name__ == "__main__":
 
     # save the icon to a temporary file and start the indicator
     with tempfile.NamedTemporaryFile(suffix='.svg') as icon:
-        icon.write(indicator_icon)
+        icon.write(indicator_icon.encode('utf-8'))
         icon.flush()
         args.icon = icon.name
         try:
             bi = BookmarksIndicator(args)
         except Exception as e:
             message = "Error:\n\n%s\n\nDo you want to edit the config file?" % str(e)
-            print message
-            mbox = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_YES_NO)
+            print(message)
+            mbox = gtk.MessageDialog(type=gtk.MessageType.ERROR, buttons=gtk.ButtonsType.YES_NO)
             mbox.set_title("bookmarks-indicator")
             mbox.set_markup(message)
-            if mbox.run() == gtk.RESPONSE_YES:
-                print "Opening the configuration file ..."
+            if mbox.run() == gtk.ResponseType.YES:
+                print("Opening the configuration file ...")
                 p = subprocess.Popen([args.opener, args.config])
-            print "Will now quit."
+            print("Will now quit.")
