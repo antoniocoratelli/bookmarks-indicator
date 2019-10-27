@@ -172,10 +172,16 @@ class BookmarksIndicator:
         '''
         When the user clicks on a file, open it in the default program.
         '''
+        print("onclick begin:", path)
         if path.endswith(tuple(self.executables)):
+            print("onclick exec before:", path)
             p = subprocess.Popen([path])
+            print("onclick exec after: ", path)
         else:
+            print("onclick open before:", path)
             p = subprocess.Popen([self.opener, path])
+            print("onclick open after: ", path)
+        print("onclick end:", path)
 
     def onshell(self, widget, path):
         '''
