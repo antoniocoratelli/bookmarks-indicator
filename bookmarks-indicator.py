@@ -127,7 +127,7 @@ class BookmarksIndicator:
         elif os.path.isdir(path):
             item = gtk.MenuItem(name, False)
             submenu = self.append_dummy(item)
-            item.connect("activate-item", self.onhover, path, submenu)
+            item.connect("button-press-event", self.onhover, path, submenu)
             items.append(item)
         else:
             item = gtk.MenuItem(name, False)
