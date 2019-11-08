@@ -30,7 +30,9 @@ Example of a `config` file:
     ---
     $HOME/Documents/TodoList.txt
 
-## Requirements
+## Build
+
+- Run `sudo apt-get install build-essential libgtk-3-dev`
 
 This indicator requires the following python modules: `os`, `sys`, `tempfile`,
 `subprocess`, `gtk`, `appindicator`, `argparse`.
