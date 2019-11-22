@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <bkm/MenuItemBase.h>
+#include <bkm/OpenServiceProvider.h>
 #include <bkm/StableCallback.h>
 #include <bkm/Utils.h>
 
@@ -9,10 +10,11 @@ namespace bkm {
 
 class MenuItemFolderOpenInExplorer : public MenuItemBase {
 public:
-    MenuItemFolderOpenInExplorer(Config::sptr_t config, std::string path):
-        m_callback{this->signal_activate(), [path, config] {
+    MenuItemFolderOpenInExplorer(
+            OpenServiceProvider::cptr_t open_provider, std::string path):
+        m_callback{this->signal_activate(), [path, open_provider] {
             std::cout << "activate::MenuItemFolderOpenInExplorer(" << path << ")" << std::endl;
-            std::system(config->get_folder_cmd(path).c_str());
+            open_provider->open_folder_in_explorer(path);
         }} {
         this->set_base_image("system-file-manager");
         this->set_label("Open Folder");

@@ -1,8 +1,9 @@
-icon: bookmark-new
-terminal_cmd: guake --show -n @PATH
-folder_cmd: xdg-open @PATH
-file_cmd: xdg-open @PATH
-folder: $HOME/Downloads
-folder: $HOME/Videos
-file: $HOME/.bashrc
-file: $HOME/.profile
+$HOME/Documents
+$HOME/Downloads
+---Media
+$HOME/Music
+$HOME/Pictures
+$HOME/Videos
+/media/user/DRIVE
+---
+$HOME/Documents/TodoList.txt

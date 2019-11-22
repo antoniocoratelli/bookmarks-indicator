@@ -14,4 +14,4 @@ target_include_directories(bookmarks-indicator
 target_link_directories(bookmarks-indicator
   PRIVATE ${GTKMM_LIBRARY_DIRS})
 target_link_libraries(bookmarks-indicator
-  PRIVATE ${GTKMM_LIBRARIES})
+  PRIVATE ${GTKMM_LIBRARIES} pthread)

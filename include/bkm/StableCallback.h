@@ -11,7 +11,6 @@ public:
     using func_type = std::function<void()>;
 
     StableCallback(Glib::SignalProxy<void>&& signal_proxy, func_type func):
-        m_rand{::rand()},
         m_func{std::make_unique<func_type>(std::move(func))},
         m_conn{std::make_unique<sigc::connection>()} {
         auto f = sigc::mem_fun(m_func.get(), &func_type::operator());
@@ -30,7 +29,6 @@ public:
     StableCallback& operator=(StableCallback const& other) = delete;
 
 private:
-    int m_rand;
     std::unique_ptr<func_type> m_func;
     std::unique_ptr<sigc::connection> m_conn;
 };

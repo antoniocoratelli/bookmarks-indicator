@@ -3,16 +3,17 @@
 #include <iostream>
 #include <bkm/MenuItemBase.h>
 #include <bkm/StableCallback.h>
+#include <bkm/OpenServiceProvider.h>
 #include <bkm/Utils.h>
 
 namespace bkm {
 
 class MenuItemFileOpen : public MenuItemBase {
 public:
-    MenuItemFileOpen(Config::sptr_t config, std::string path):
-        m_callback{this->signal_activate(), [path, config] {
+    MenuItemFileOpen(OpenServiceProvider::cptr_t open_provider, std::string const& path):
+        m_callback{this->signal_activate(), [path, o = std::move(open_provider)] {
             std::cout << "activate::MenuItemFileOpen(" << path << ")" << std::endl;
-            std::system(config->get_file_cmd(path).c_str());
+            o->open_file(path);
         }} {
         auto text = bkm::get_file_name(path);
         this->set_base_label_and_tooltip(text);
