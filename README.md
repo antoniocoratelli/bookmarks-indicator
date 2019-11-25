@@ -1,7 +1,5 @@
 # bookmarks-indicator
 
-Bookmarks indicator for Ubuntu, written in Python.
-
 ![example][animation]
 
 > Think of it as a handy way to quickly open the files you use regularly,
