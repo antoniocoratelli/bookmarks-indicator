@@ -15,4 +15,5 @@ target_link_directories(bookmarks-indicator
   PRIVATE ${GTKMM_LIBRARY_DIRS})
 target_link_libraries(bookmarks-indicator
   PRIVATE ${GTKMM_LIBRARIES} pthread)
-install(TARGETS bookmarks-indicator)
+install(TARGETS bookmarks-indicator
+  RUNTIME DESTINATION bin)
