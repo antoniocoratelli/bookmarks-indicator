@@ -26,9 +26,10 @@ cmake .. && make && sudo make install
 
 ## Usage and Configuration
 
-- Create a file named `nano $HOME/.bookmarks-indicator.cfg` 
-- Populate it with all the folders and files you want to bookmark, one per line;
-  environment variables like `$HOME` are expanded;
+- Create a configuration file with `touch $HOME/.bookmarks-indicator.cfg` 
+- Run `nano $HOME/.bookmarks-indicator.cfg` 
+- Populate the content with all the folders and files you want to bookmark, 
+  one per line; environment variables like `$HOME` are expanded;
 - Use `---` or `--- Some Header` where you want to place a menu separator;
 
 Example of a configuration file:
