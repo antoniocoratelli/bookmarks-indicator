@@ -80,20 +80,29 @@ int main(int argc, char const* const* argv) try {
     bkm::MainWindow main_window(app_icon);
     for (auto const& line : config_lines) {
         if (line == "---") {
+            std::cout << ">>> Add bkm::SeparatorMenuItem" << std::endl;
             main_window.append(new Gtk::SeparatorMenuItem());
         } else if (line.substr(0, 3) == "---") {
             auto label = bkm::trim_spaces(line.substr(3));
+            std::cout << ">>> Add bkm::SeparatorMenuItem" << std::endl;
             main_window.append(new Gtk::SeparatorMenuItem());
+            std::cout << ">>> Add bkm::MenuItemLabel(" << label << ")" << std::endl;
             main_window.append(new bkm::MenuItemLabel(label));
         } else if (bkm::is_regular_file(line.c_str())) {
+            std::cout << ">>> Add bkm::MenuItemFileOpen(" << line << ")" << std::endl;
             main_window.append(new bkm::MenuItemFileOpen(osp, line));
         } else if (bkm::is_directory(line.c_str())) {
+            std::cout << ">>> Add bkm::MenuItemFolderContent(" << line << ")" << std::endl;
             main_window.append(new bkm::MenuItemFolderContent(osp, line));
         }
     }
+    std::cout << ">>> Add bkm::SeparatorMenuItem" << std::endl;
     main_window.append(new Gtk::SeparatorMenuItem());
+    std::cout << ">>> Add bkm::MenuItemGitHub" << std::endl;
     main_window.append(new bkm::MenuItemGitHub(osp));
+    std::cout << ">>> Add bkm::MenuItemQuit" << std::endl;
     main_window.append(new bkm::MenuItemQuit());
+    std::cout << "Ready!" << std::endl;
     return gApp->run(main_window);
 } catch(...) {
     return -1;
