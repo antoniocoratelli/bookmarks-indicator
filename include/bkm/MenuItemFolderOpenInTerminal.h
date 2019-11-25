@@ -23,15 +23,15 @@
 
 namespace bkm {
 
-class MenuItemFolderOpenInExplorer : public MenuItemBase {
+class MenuItemFolderOpenInTerminal : public MenuItemBase {
 public:
-    MenuItemFolderOpenInExplorer(OpenServiceProvider::cptr_t osp, std::string path):
+    MenuItemFolderOpenInTerminal(OpenServiceProvider::cptr_t osp, std::string path):
         m_callback{this->signal_activate(), [path, osp] {
-            std::cout << "activate::MenuItemFolderOpenInExplorer(" << path << ")" << std::endl;
-            osp->open_folder_in_explorer(path);
+            std::cout << "activate::MenuItemFolderOpenInTerminal(" << path << ")" << std::endl;
+            osp->open_folder_in_terminal(path);
         }} {
-        this->set_base_image("system-file-manager");
-        this->set_label("Open Folder");
+        this->set_base_image("utilities-terminal");
+        this->set_label("Open Folder in Terminal");
     }
 
 private:

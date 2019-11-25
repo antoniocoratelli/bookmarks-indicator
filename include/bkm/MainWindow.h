@@ -1,6 +1,23 @@
+//    Copyright (C) 2019, Antonio Coratelli
+//
+//    This library is free software; you can redistribute it and/or
+//    modify it under the terms of the GNU Lesser General Public
+//    License as published by the Free Software Foundation; either
+//    version 2.1 of the License, or (at your option) any later version.
+//
+//    This library is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//    Lesser General Public License for more details.
+//
+//    You should have received a copy of the GNU Lesser General Public
+//    License along with this library; if not, write to the Free Software
+//    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+//
 #pragma once
 
 #include <bkm/MenuItemBase.h>
+#include <bkm/Utils.h>
 
 #include <gtkmm/window.h>
 #include <gtkmm/statusicon.h>
@@ -18,8 +35,11 @@ namespace bkm {
 
 class MainWindow : public Gtk::Window {
 public:
-    MainWindow() {
-        m_icon = Gtk::StatusIcon::create("bookmark-new");
+    explicit MainWindow(std::string icon_path_or_id) {
+        bool const icon_is_path = bkm::is_regular_file(icon_path_or_id.c_str());
+        m_icon = icon_is_path ?
+            Gtk::StatusIcon::create_from_file(icon_path_or_id):
+            Gtk::StatusIcon::create(icon_path_or_id);
         m_icon->signal_activate().connect(
             sigc::mem_fun(*this, &MainWindow::callback_activate));
         m_menu.signal_button_release_event().connect(

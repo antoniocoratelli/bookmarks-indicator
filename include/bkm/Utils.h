@@ -1,3 +1,19 @@
+//    Copyright (C) 2019, Antonio Coratelli
+//
+//    This library is free software; you can redistribute it and/or
+//    modify it under the terms of the GNU Lesser General Public
+//    License as published by the Free Software Foundation; either
+//    version 2.1 of the License, or (at your option) any later version.
+//
+//    This library is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//    Lesser General Public License for more details.
+//
+//    You should have received a copy of the GNU Lesser General Public
+//    License along with this library; if not, write to the Free Software
+//    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+//
 #pragma once
 
 #include <string>
@@ -17,6 +33,16 @@ inline std::string get_file_name(std::string const& path) {
     auto pos_beg = path.find_first_not_of('/', pos_sep);
     auto idx = (pos_beg == std::string::npos) ? 0 : pos_beg;
     return path.substr(idx);
+}
+
+inline std::string trim_spaces(std::string s) {
+    std::reverse(s.begin(), s.end());
+    while (not s.empty() and s.back() == ' ')
+        s.pop_back();
+    std::reverse(s.begin(), s.end());
+    while (not s.empty() and s.back() == ' ')
+        s.pop_back();
+    return s;
 }
 
 inline std::vector<std::string> get_content_folders(std::string path) {
@@ -67,15 +93,15 @@ inline std::string expand_env(std::string const& source) {
     return result.str();
 }
 
-inline int is_regular_file(const char *path) {
+inline bool is_regular_file(const char *path) {
     struct stat path_stat;
-    stat(path, &path_stat);
+    ::stat(path, &path_stat);
     return S_ISREG(path_stat.st_mode);
 }
 
-inline int is_directory(const char *path) {
+inline bool is_directory(const char *path) {
     struct stat path_stat;
-    stat(path, &path_stat);
+    ::stat(path, &path_stat);
     return S_ISDIR(path_stat.st_mode);
 }
 
