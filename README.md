@@ -10,70 +10,75 @@ Bookmarks indicator for Ubuntu, written in Python.
 >
 > _[OMG! Ubuntu!][omgubuntu] Post_
 
-## Brief Guide
+## Build and Install
 
-- Put in `config` all the folders and files you want to bookmark, one per line;
+The following instructions are for *Debian 9*, some changes might be 
+required to install dependencies under different *Debian* versions or 
+under *Ubuntu*.
+
+```bash
+sudo apt install build-essential cmake libgtk-3-dev libgtkmm-3.0-dev
+git clone https://github.com/antoniocoratelli/bookmarks-indicator.git
+mkdir -p bookmarks-indicator/build
+cd bookmarks-indicator/build
+cmake .. && make && sudo make install 
+```
+
+## Usage and Configuration
+
+- Create a file named `nano $HOME/.bookmarks-indicator.cfg` 
+- Populate it with all the folders and files you want to bookmark, one per line;
   environment variables like `$HOME` are expanded;
 - Use `---` or `--- Some Header` where you want to place a menu separator;
-- Open a terminal in the folder containing `bookmarks-indicator.py`;
-- Run `python bookmarks-indicator.py`.
 
-Example of a `config` file:
-
-    $HOME/Documents
-    $HOME/Downloads
-    --- Media
-    $HOME/Music
-    $HOME/Pictures
-    $HOME/Videos
-    /media/user/DRIVE
-    ---
-    $HOME/Documents/TodoList.txt
-
-## Requirements
-
-This indicator requires the following python modules: `os`, `sys`, `tempfile`,
-`subprocess`, `gtk`, `appindicator`, `argparse`.
-You can install the missing ones using `pip` ([link][pip]).
-
-## Advanced Usage
+Example of a configuration file:
 
 ```
-usage: bookmarks-indicator.py [OPTIONS]
-
-optional arguments:
-  -h, --help  show this help message and exit
-  -i COLOR    icon color (default: '#010101'); accepts all HTML color values,
-              such as '#FF0000' or 'red'; when using hex colors make sure to
-              quote them, otherwise shell bash will interpret everything
-              following # as a comment
-  -c CONFIG   config file path (default: '<script-path>/config')
-  -l LABEL    indicator label (default: '')
-  -o OPENER   file opener (default: 'xdg-open')
-  -t SHELL    shell (default: 'gnome-terminal')
-  -x EXT      execute -- instead of open in editor -- files with chosen
-              extension (default: disabled) for example '-x ".sh" -x ".py"'
-              will execute bash and python scripts (ensure they have file
-              execution permission)
-
-Copyright (c) 2016, Antonio Coratelli.
-Released under BSD 3-Clause License. See 'LICENSE' file.
-
-Icon extracted from "WPZOOM Developer Icon Set" by WPZOOM.
-http://www.wpzoom.com/wpzoom/new-freebie-wpzoom-developer-icon-set-154-free-icons
+$HOME/Documents
+$HOME/Downloads
+--- Media
+$HOME/Music
+$HOME/Pictures
+$HOME/Videos
+/media/user/DRIVE
+---
+$HOME/Documents/TodoList.txt
 ```
 
-## Support
+Run `bookmarks-indicator --help`:
 
-If you like this application, you can [share it][support_share],
-[buy me a coffe][support_paypal], or just say thanks adding a
-[star][support_star] :)
+```
+bookmarks-indicator
 
+A handy tool to quickly open the files you use regularly.
+
+
+Usage: bookmarks-indicator [OPTIONS]
+
+Options:
+  -h,--help    Print this help message and exit
+  -c TEXT      Configuration file path, default: '$HOME/.bookmarks-indicator.cfg'
+  -o TEXT      Command to open regular files, default: 'xdg-open'
+  -f TEXT      Command to open folders in explorer, default: 'xdg-open'
+  -t TEXT      Command to open folders in terminal, default: 'gnome-terminal'
+  -i TEXT      Icon of the indicator, can be a path or a gtk icon identifier, default: 'bookmark-new'
+```
+
+## Disclaimer
+
+This indicator was developed under Debian 9 using XFCE desktop environment.
+If you have troubles running the indicator on your system please open an issue and
+we'll debug together.
+
+```
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+SOFTWARE.
+```
 
 [animation]: https://raw.githubusercontent.com/antoniocoratelli/bookmarks-indicator/master/res/animation.gif
 [omgubuntu]: http://www.omgubuntu.co.uk/2016/09/simple-bookmarks-indicator-ubuntu-desktop
-[pip]: https://wiki.python.org/moin/CheeseShopTutorial#Installing_Distributions
-
-[support_share]:  https://www.addtoany.com/share/#url=github.com/antoniocoratelli/bookmarks-indicator
-[support_star]:   https://github.com/antoniocoratelli/bookmarks-indicator/stargazers
-[support_paypal]: https://paypal.me/antoniocoratelli
