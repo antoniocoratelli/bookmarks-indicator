@@ -13,14 +13,9 @@ jobs:
     steps:
     - uses: docker://debian:9
     - uses: actions/checkout@v2
-    - name: build
+    - name: Build
       run: |
         sudo apt update
         sudo apt -y install build-essential cmake libgtk-3-dev libgtkmm-3.0-dev
-        pwd
-        ls -al
-        mkdir -p bookmarks-indicator/build
-        cd bookmarks-indicator/build
-        pwd
-        ls -al
+        mkdir build && cd build
         cmake .. && make && sudo make install 
