@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build
       run: |
-        sudo apt update
-        sudo apt -y install build-essential cmake libgtk-3-dev libgtkmm-3.0-dev
+        apt update
+        apt -y install build-essential cmake libgtk-3-dev libgtkmm-3.0-dev
         mkdir build && cd build
-        cmake .. && make && sudo make install 
+        cmake .. && make && make install 
